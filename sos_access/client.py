@@ -484,11 +484,11 @@ class TCPTransport:
         sock.settimeout(timeout or self.timeout)
 
         if secure:
-            # Setting Purpose to CLIENT_AUTH might seem a bit backwards. But
             # SOS Access v4 is using SSL/TLS for encryption not authentications
-            # and verification. There is no cert and no hostname to check so
-            # setting the purpose to Client Auth diables that in a nifty way.
-            self.context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+            # and verification. There is no cert and no hostname to check
+            self.context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
+            self.context.check_hostname = False
+            self.context.verify_mode = ssl.CERT_NONE
             return self.context.wrap_socket(sock)
 
         else:
