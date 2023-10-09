@@ -268,7 +268,7 @@ class SOSAccessSchema(marshmallow.Schema):
     __model__ = None
 
     @marshmallow.pre_load()
-    def load_xml(self, data, **kwargs):
+    def load_xml(self, data, many, **kwargs):
         try:
             # incoming XML
             parsed_data = xmltodict.parse(data)
@@ -280,7 +280,7 @@ class SOSAccessSchema(marshmallow.Schema):
         return in_data
 
     @marshmallow.post_dump()
-    def dump_xml(self, data, **kwargs):
+    def dump_xml(self, data, many, **kwargs):
         # add the envelope
         data_to_dump = {self.__envelope__: data}
         # make xml
@@ -294,7 +294,7 @@ class SOSAccessSchema(marshmallow.Schema):
         return out_data
 
     @marshmallow.post_load()
-    def make_object(self, data, **kwargs):
+    def make_object(self, data, many, **kwargs):
         return self.__model__(**data)
 
 
@@ -384,7 +384,7 @@ class AlarmResponseSchema(SOSAccessSchema):
     )
     info = marshmallow.fields.String(required=True, validate=[Length(min=1, max=255)])
     arrival_time = marshmallow.fields.DateTime(
-        allow_none=True, data_key="arrivaltime", datetimeformat="rfc"
+        allow_none=True, data_key="arrivaltime", format="rfc"
     )
 
     class Meta:
@@ -441,7 +441,7 @@ class NewAuthResponseSchema(SOSAccessSchema):
         required=False, validate=[Length(equal=15)], data_key="newauthentication"
     )
     arrival_time = marshmallow.fields.DateTime(
-        allow_none=True, data_key="arrivaltime", datetimeformat="rfc"
+        allow_none=True, data_key="arrivaltime", format="rfc"
     )
 
     class Meta:
@@ -495,7 +495,7 @@ class PingResponseSchema(SOSAccessSchema):
     )
     info = marshmallow.fields.String(required=True, validate=[Length(min=1, max=255)])
     arrival_time = marshmallow.fields.DateTime(
-        allow_none=True, data_key="arrivaltime", datetimeformat="rfc"
+        allow_none=True, data_key="arrivaltime", format="rfc"
     )
 
     class Meta:
