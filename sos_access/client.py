@@ -395,7 +395,7 @@ class SOSAccessClient:
                 duration = time.time() - start_time
                 continue
 
-        raise SOSAccessClientException("Reading response within timeout failed")
+        raise TCPTransportError("Reading response within timeout failed")
 
     @staticmethod
     def _check_response_status(response):
