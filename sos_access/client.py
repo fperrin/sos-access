@@ -86,6 +86,7 @@ class SOSAccessClient:
         secondary_receiver_address=None,
         use_single_receiver=False,
         use_tls=False,
+        timeout=10,
     ):
         self.transmitter_code = transmitter_code
         self.transmitter_type = transmitter_type
@@ -95,6 +96,7 @@ class SOSAccessClient:
         self.secondary_receiver_address = secondary_receiver_address
         self.use_single_receiver = use_single_receiver
         self.use_tls = use_tls
+        self.timeout = timeout
 
         if self.secondary_receiver_address is None and not use_single_receiver:
             raise IncorrectlyConfigured(
@@ -361,14 +363,14 @@ class SOSAccessClient:
             f"Starting new connection to {address} with " f"secure={self.use_tls}"
         )
 
-        with TCPTransport(address, secure=self.use_tls) as transport:
+        with TCPTransport(address, secure=self.use_tls, timeout=self.timeout) as transport:
             transport.connect()
 
             transport.send(data.encode(self.ENCODING))
 
             return self._receive(transport, response_schema)
 
-    def _receive(self, transport, response_schema, timeout=10):
+    def _receive(self, transport, response_schema):
         """
         Some alarm receivers will send the response in several packets.
         Try and parse for each packet and if it doesnt work read some more.
@@ -383,7 +385,7 @@ class SOSAccessClient:
         in_data = ""
         start_time = time.time()
         duration = 0
-        while duration < timeout:
+        while duration < self.timeout:
             in_data = in_data + transport.receive().decode(self.ENCODING)
             try:
                 response = response_schema.load(in_data)
