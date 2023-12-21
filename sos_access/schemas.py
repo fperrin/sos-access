@@ -384,7 +384,7 @@ class AlarmResponseSchema(SOSAccessSchema):
     )
     info = marshmallow.fields.String(required=True, validate=[Length(min=1, max=255)])
     arrival_time = marshmallow.fields.DateTime(
-        allow_none=True, data_key="arrivaltime", format="rfc"
+        allow_none=True, data_key="arrivaltime", format="%Y-%m-%d %H:%M:%S"
     )
 
     class Meta:
@@ -441,7 +441,7 @@ class NewAuthResponseSchema(SOSAccessSchema):
         required=False, validate=[Length(equal=15)], data_key="newauthentication"
     )
     arrival_time = marshmallow.fields.DateTime(
-        allow_none=True, data_key="arrivaltime", format="rfc"
+        allow_none=True, data_key="arrivaltime", format="%Y-%m-%d %H:%M:%S"
     )
 
     class Meta:
@@ -495,7 +495,7 @@ class PingResponseSchema(SOSAccessSchema):
     )
     info = marshmallow.fields.String(required=True, validate=[Length(min=1, max=255)])
     arrival_time = marshmallow.fields.DateTime(
-        allow_none=True, data_key="arrivaltime", format="rfc"
+        allow_none=True, data_key="arrivaltime", format="%Y-%m-%d %H:%M:%S"
     )
 
     class Meta:
