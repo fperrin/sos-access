@@ -71,7 +71,7 @@ with open('HISTORY.md') as history_file:
 
 setup(
     name=NAME,
-    version='0.0.8a',
+    version='0.0.8b',
     python_requires=REQUIRES_PYTHON,
     description=DESCRIPTION,
     long_description=readme + "\n\n" + history,
